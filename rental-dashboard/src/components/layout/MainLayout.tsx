@@ -50,10 +50,12 @@ const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, o
       }`}>
         {/* Fixed Header */}
         <div className="flex items-center justify-between px-6 py-6 border-b border-border flex-shrink-0">
-          <h1 className="text-2xl font-bold text-primary">FleetFlow</h1>
+          <h1 className="text-3xl text-primary hidden lg:block" style={{ fontFamily: "'Permanent Marker', cursive" }}>
+            Galant
+          </h1>
           <button
             onClick={onClose}
-            className="lg:hidden p-2 hover:bg-muted rounded-lg transition-colors"
+            className="lg:hidden p-2 hover:bg-muted rounded-lg transition-colors ml-auto"
             aria-label="Close sidebar"
           >
             <X size={20} />
@@ -135,20 +137,17 @@ const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, o
 
 const Navbar: React.FC<{ onMenuClick: () => void }> = ({ onMenuClick }) => {
   return (
-    <header className="bg-card px-4 md:px-6 py-4 flex justify-between items-center border-b border-border">
+    <header className="lg:hidden bg-card px-4 py-3 border-b border-border flex items-center justify-between">
       <button
         onClick={onMenuClick}
-        className="lg:hidden p-2 hover:bg-muted rounded-lg transition-colors"
+        className="p-2 hover:bg-muted rounded-lg transition-colors"
         aria-label="Toggle sidebar"
       >
         <Menu size={24} />
       </button>
-      <div className="flex-1 lg:flex-none">
-        <h2 className="text-lg md:text-xl font-semibold">Fleet & Construction Equipment Rental</h2>
-      </div>
-      <div className="text-muted-foreground hidden md:block">
-        <span>Welcome, Manager</span>
-      </div>
+      <h1 className="text-2xl text-primary" style={{ fontFamily: "'Permanent Marker', cursive" }}>
+        Galant
+      </h1>
     </header>
   );
 };
