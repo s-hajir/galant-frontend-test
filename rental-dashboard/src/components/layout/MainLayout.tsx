@@ -7,11 +7,11 @@ export const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
-    <div className="flex h-screen bg-background text-foreground">
+    <div className="flex h-screen bg-gray-50 text-foreground">
       {/* Mobile Backdrop */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/70 z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
           aria-hidden="true"
         />
@@ -42,6 +42,11 @@ const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void; isCollapsed: boo
   const location = useLocation();
 
   const toggleMenu = (menuId: string) => {
+    // If collapsed on desktop, expand the sidebar first
+    if (isCollapsed) {
+      onToggleCollapse();
+    }
+    
     setExpandedMenus(prev => ({
       ...prev,
       [menuId]: !prev[menuId]
@@ -68,7 +73,7 @@ const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void; isCollapsed: boo
           className="flex items-center justify-between px-6 py-6 border-b flex-shrink-0"
           style={{ borderColor: 'hsl(var(--sidebar-border))' }}
         >
-          <h1 className={`text-3xl text-primary transition-opacity duration-300 ${isCollapsed ? 'lg:hidden' : 'hidden lg:block'}`} style={{ fontFamily: "'Permanent Marker', cursive" }}>
+          <h1 className={`text-3xl text-primary transition-opacity duration-300 ${isCollapsed ? 'lg:hidden' : ''}`} style={{ fontFamily: "'Permanent Marker', cursive" }}>
             Galant
           </h1>
           {/* Collapse Toggle - Desktop Only */}
@@ -235,6 +240,9 @@ const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void; isCollapsed: boo
 const Navbar: React.FC<{ onMenuClick: () => void }> = ({ onMenuClick }) => {
   return (
     <header className="lg:hidden bg-card px-4 py-3 border-b border-border flex items-center justify-between">
+      <h1 className="text-2xl text-primary" style={{ fontFamily: "'Permanent Marker', cursive" }}>
+        Galant
+      </h1>
       <button
         onClick={onMenuClick}
         className="p-2 hover:bg-muted rounded-lg transition-colors"
@@ -242,9 +250,6 @@ const Navbar: React.FC<{ onMenuClick: () => void }> = ({ onMenuClick }) => {
       >
         <Menu size={24} />
       </button>
-      <h1 className="text-2xl text-primary" style={{ fontFamily: "'Permanent Marker', cursive" }}>
-        Galant
-      </h1>
     </header>
   );
 };
