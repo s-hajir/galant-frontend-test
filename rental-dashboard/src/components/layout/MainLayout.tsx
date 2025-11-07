@@ -149,6 +149,66 @@ const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void; isCollapsed: boo
             isCollapsed={isCollapsed}
           />
           <NavLink href="/customers" label="Customers" icon={<Users size={20} />} onClick={onClose} isCollapsed={isCollapsed} />
+          <SubmenuNavLink 
+            label="Reports" 
+            icon={<Home size={20} />} 
+            menuId="reports"
+            isExpanded={expandedMenus.reports || false}
+            onToggle={toggleMenu}
+            submenu={[
+              { href: '/reports/financial', label: 'Financial Reports' },
+              { href: '/reports/equipment', label: 'Equipment Reports' },
+              { href: '/reports/customer', label: 'Customer Reports' }
+            ]}
+            currentPath={location.pathname}
+            onClick={onClose}
+            isCollapsed={isCollapsed}
+          />
+          <SubmenuNavLink 
+            label="Analytics" 
+            icon={<Truck size={20} />} 
+            menuId="analytics"
+            isExpanded={expandedMenus.analytics || false}
+            onToggle={toggleMenu}
+            submenu={[
+              { href: '/analytics/utilization', label: 'Utilization' },
+              { href: '/analytics/revenue', label: 'Revenue' },
+              { href: '/analytics/trends', label: 'Trends' }
+            ]}
+            currentPath={location.pathname}
+            onClick={onClose}
+            isCollapsed={isCollapsed}
+          />
+          <SubmenuNavLink 
+            label="Settings" 
+            icon={<Wrench size={20} />} 
+            menuId="settings"
+            isExpanded={expandedMenus.settings || false}
+            onToggle={toggleMenu}
+            submenu={[
+              { href: '/settings/general', label: 'General' },
+              { href: '/settings/users', label: 'Users' },
+              { href: '/settings/permissions', label: 'Permissions' }
+            ]}
+            currentPath={location.pathname}
+            onClick={onClose}
+            isCollapsed={isCollapsed}
+          />
+          <SubmenuNavLink 
+            label="Notifications" 
+            icon={<Building size={20} />} 
+            menuId="notifications"
+            isExpanded={expandedMenus.notifications || false}
+            onToggle={toggleMenu}
+            submenu={[
+              { href: '/notifications/alerts', label: 'Alerts' },
+              { href: '/notifications/messages', label: 'Messages' },
+              { href: '/notifications/reminders', label: 'Reminders' }
+            ]}
+            currentPath={location.pathname}
+            onClick={onClose}
+            isCollapsed={isCollapsed}
+          />
         </nav>
 
         {/* Fixed Footer */}
