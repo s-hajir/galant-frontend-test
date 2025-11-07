@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { NavLink as RouterNavLink, useLocation } from 'react-router-dom';
-import { Home, Truck, Wrench, DollarSign, Users, Building, ChevronDown, Menu, X } from 'lucide-react';
+import { Home, Truck, Wrench, DollarSign, Users, Building, ChevronDown, Menu, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
     <div className="flex h-screen bg-background text-foreground">
@@ -17,7 +18,12 @@ export const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }
       )}
 
       {/* Sidebar */}
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar 
+        isOpen={sidebarOpen} 
+        onClose={() => setSidebarOpen(false)}
+        isCollapsed={sidebarCollapsed}
+        onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+      />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
@@ -31,7 +37,7 @@ export const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }
   );
 };
 
-const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
+const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void; isCollapsed: boolean; onToggleCollapse: () => void }> = ({ isOpen, onClose, isCollapsed, onToggleCollapse }) => {
   const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({});
   const location = useLocation();
 
@@ -46,9 +52,11 @@ const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, o
     <>
       {/* Sidebar - Hidden on mobile, visible on lg+ */}
       <aside 
-        className={`fixed lg:static inset-y-0 left-0 z-50 w-64 flex flex-col border-r transform transition-transform duration-300 ease-in-out ${
+        className={`fixed lg:static inset-y-0 left-0 z-50 flex flex-col border-r transform transition-all duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-        }`}
+        } ${
+          isCollapsed ? 'lg:w-20' : 'lg:w-64'
+        } w-64`}
         style={{ 
           backgroundColor: 'hsl(var(--sidebar-bg))', 
           color: 'hsl(var(--sidebar-text))',
@@ -60,9 +68,18 @@ const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, o
           className="flex items-center justify-between px-6 py-6 border-b flex-shrink-0"
           style={{ borderColor: 'hsl(var(--sidebar-border))' }}
         >
-          <h1 className="text-3xl text-primary hidden lg:block" style={{ fontFamily: "'Permanent Marker', cursive" }}>
+          <h1 className={`text-3xl text-primary transition-opacity duration-300 ${isCollapsed ? 'lg:hidden' : 'hidden lg:block'}`} style={{ fontFamily: "'Permanent Marker', cursive" }}>
             Galant
           </h1>
+          {/* Collapse Toggle - Desktop Only */}
+          <button
+            onClick={onToggleCollapse}
+            className="hidden lg:block p-2 hover:bg-slate-800 rounded-lg transition-colors"
+            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+          </button>
+          {/* Mobile Close Button */}
           <button
             onClick={onClose}
             className="lg:hidden p-2 hover:bg-slate-800 rounded-lg transition-colors ml-auto"
@@ -74,7 +91,7 @@ const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, o
 
         {/* Scrollable Navigation Area */}
         <nav className="space-y-2 flex-1 overflow-y-auto px-6 py-4 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
-          <NavLink href="/" label="Dashboard" icon={<Home size={20} />} onClick={onClose} />
+          <NavLink href="/" label="Dashboard" icon={<Home size={20} />} onClick={onClose} isCollapsed={isCollapsed} />
           <SubmenuNavLink 
             label="Equipment" 
             icon={<Truck size={20} />} 
@@ -87,6 +104,7 @@ const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, o
             ]}
             currentPath={location.pathname}
             onClick={onClose}
+            isCollapsed={isCollapsed}
           />
           <SubmenuNavLink 
             label="Rentals" 
@@ -100,6 +118,7 @@ const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, o
             ]}
             currentPath={location.pathname}
             onClick={onClose}
+            isCollapsed={isCollapsed}
           />
           <SubmenuNavLink 
             label="Maintenance" 
@@ -113,6 +132,7 @@ const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, o
             ]}
             currentPath={location.pathname}
             onClick={onClose}
+            isCollapsed={isCollapsed}
           />
           <SubmenuNavLink 
             label="Billing" 
@@ -126,22 +146,23 @@ const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, o
             ]}
             currentPath={location.pathname}
             onClick={onClose}
+            isCollapsed={isCollapsed}
           />
-          <NavLink href="/customers" label="Customers" icon={<Users size={20} />} onClick={onClose} />
+          <NavLink href="/customers" label="Customers" icon={<Users size={20} />} onClick={onClose} isCollapsed={isCollapsed} />
         </nav>
 
         {/* Fixed Footer */}
         <div 
-          className="border-t px-6 py-4 flex-shrink-0 flex items-center space-x-3"
+          className={`border-t px-6 py-4 flex-shrink-0 flex items-center transition-all duration-300 ${isCollapsed ? 'lg:px-3 lg:justify-center' : 'space-x-3'}`}
           style={{ 
             borderColor: 'hsl(var(--sidebar-border))',
             backgroundColor: 'hsl(var(--sidebar-bg))' 
           }}
         >
-          <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
             <Users size={16} className="text-primary" />
           </div>
-          <div className="min-w-0 flex-1">
+          <div className={`min-w-0 flex-1 transition-opacity duration-300 ${isCollapsed ? 'lg:hidden' : ''}`}>
             <p className="text-sm font-medium truncate" style={{ color: 'hsl(var(--sidebar-text))' }}>Manager</p>
             <p className="text-xs truncate text-slate-400">Fleet Admin</p>
           </div>
@@ -173,23 +194,25 @@ interface NavLinkProps {
   label: string;
   icon: React.ReactNode;
   onClick?: () => void;
+  isCollapsed?: boolean;
 }
 
-const NavLink: React.FC<NavLinkProps> = ({ href, label, icon, onClick }) => {
+const NavLink: React.FC<NavLinkProps> = ({ href, label, icon, onClick, isCollapsed }) => {
   return (
     <RouterNavLink
       to={href}
       onClick={onClick}
+      title={isCollapsed ? label : undefined}
       className={({ isActive }) =>
         `flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
           isActive
             ? 'bg-primary/40 text-primary-foreground'
             : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-        }`
+        } ${isCollapsed ? 'lg:justify-center lg:px-2' : ''}`
       }
     >
       {icon}
-      <span>{label}</span>
+      <span className={`transition-opacity duration-300 ${isCollapsed ? 'lg:hidden' : ''}`}>{label}</span>
     </RouterNavLink>
   );
 };
@@ -208,6 +231,7 @@ interface SubmenuNavLinkProps {
   submenu: Submenu[];
   currentPath: string;
   onClick?: () => void;
+  isCollapsed?: boolean;
 }
 
 const SubmenuNavLink: React.FC<SubmenuNavLinkProps> = ({
@@ -218,7 +242,8 @@ const SubmenuNavLink: React.FC<SubmenuNavLinkProps> = ({
   onToggle,
   submenu,
   currentPath,
-  onClick
+  onClick,
+  isCollapsed
 }) => {
   // Check if any submenu item is active
   const isParentActive = submenu.some(item => currentPath === item.href);
@@ -229,22 +254,23 @@ const SubmenuNavLink: React.FC<SubmenuNavLinkProps> = ({
         onClick={() => onToggle(menuId)}
         aria-expanded={isExpanded}
         aria-controls={`submenu-${menuId}`}
+        title={isCollapsed ? label : undefined}
         className={`w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors ${
           isParentActive
             ? 'bg-primary/40 text-primary-foreground'
             : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-        }`}
+        } ${isCollapsed ? 'lg:justify-center lg:px-2' : ''}`}
       >
-        <div className="flex items-center space-x-3">
+        <div className={`flex items-center space-x-3 ${isCollapsed ? 'lg:space-x-0' : ''}`}>
           {icon}
-          <span>{label}</span>
+          <span className={`transition-opacity duration-300 ${isCollapsed ? 'lg:hidden' : ''}`}>{label}</span>
         </div>
         <ChevronDown
           size={18}
-          className={`transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
+          className={`transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''} ${isCollapsed ? 'lg:hidden' : ''}`}
         />
       </button>
-      {isExpanded && (
+      {isExpanded && !isCollapsed && (
         <div className="ml-4 mt-2 space-y-1 border-l-2 pl-4 animate-in fade-in duration-200" style={{ borderColor: 'hsl(var(--sidebar-border))' }}>
           {submenu.map((item) => (
             <RouterNavLink
