@@ -1,6 +1,12 @@
 import React from 'react';
 
 export { default as Dashboard } from './Dashboard';
+export { default as Vehicles } from './Vehicles';
+export { default as Machines } from './Machines';
+export { default as ActiveRentals } from './ActiveRentals';
+export { default as RentalHistory } from './RentalHistory';
+export { default as ScheduledMaintenance } from './ScheduledMaintenance';
+export { default as MaintenanceHistory } from './MaintenanceHistory';
 
 export const Equipment: React.FC = () => {
   return (
