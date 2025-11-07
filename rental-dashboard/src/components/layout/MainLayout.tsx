@@ -254,7 +254,7 @@ const SubmenuNavLink: React.FC<SubmenuNavLinkProps> = ({
               className={({ isActive }) =>
                 `block px-4 py-2 rounded-lg transition-colors text-sm border-l-3 pl-3 ${
                   isActive
-                    ? 'bg-accent/40 text-accent-foreground border-l-accent'
+                    ? 'bg-accent/80 text-accent-foreground border-l-accent'
                     : 'border-l-transparent text-slate-400 hover:bg-slate-800 hover:text-white'
                 }`
               }
