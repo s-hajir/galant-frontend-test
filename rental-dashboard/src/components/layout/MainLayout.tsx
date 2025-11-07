@@ -45,17 +45,27 @@ const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, o
   return (
     <>
       {/* Sidebar - Hidden on mobile, visible on lg+ */}
-      <aside className={`fixed lg:static inset-y-0 left-0 z-50 w-64 bg-card text-card-foreground flex flex-col border-r border-border transform transition-transform duration-300 ease-in-out ${
-        isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-      }`}>
+      <aside 
+        className={`fixed lg:static inset-y-0 left-0 z-50 w-64 flex flex-col border-r transform transition-transform duration-300 ease-in-out ${
+          isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+        }`}
+        style={{ 
+          backgroundColor: 'hsl(var(--sidebar-bg))', 
+          color: 'hsl(var(--sidebar-text))',
+          borderColor: 'hsl(var(--sidebar-border))'
+        }}
+      >
         {/* Fixed Header */}
-        <div className="flex items-center justify-between px-6 py-6 border-b border-border flex-shrink-0">
+        <div 
+          className="flex items-center justify-between px-6 py-6 border-b flex-shrink-0"
+          style={{ borderColor: 'hsl(var(--sidebar-border))' }}
+        >
           <h1 className="text-3xl text-primary hidden lg:block" style={{ fontFamily: "'Permanent Marker', cursive" }}>
             Galant
           </h1>
           <button
             onClick={onClose}
-            className="lg:hidden p-2 hover:bg-muted rounded-lg transition-colors ml-auto"
+            className="lg:hidden p-2 hover:bg-slate-800 rounded-lg transition-colors ml-auto"
             aria-label="Close sidebar"
           >
             <X size={20} />
@@ -121,13 +131,19 @@ const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, o
         </nav>
 
         {/* Fixed Footer */}
-        <div className="border-t border-border px-6 py-4 flex-shrink-0 flex items-center space-x-3 bg-muted/30">
+        <div 
+          className="border-t px-6 py-4 flex-shrink-0 flex items-center space-x-3"
+          style={{ 
+            borderColor: 'hsl(var(--sidebar-border))',
+            backgroundColor: 'hsl(var(--sidebar-bg))' 
+          }}
+        >
           <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
             <Users size={16} className="text-primary" />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-medium truncate">Manager</p>
-            <p className="text-xs text-muted-foreground truncate">Fleet Admin</p>
+            <p className="text-sm font-medium truncate" style={{ color: 'hsl(var(--sidebar-text))' }}>Manager</p>
+            <p className="text-xs truncate text-slate-400">Fleet Admin</p>
           </div>
         </div>
       </aside>
@@ -168,7 +184,7 @@ const NavLink: React.FC<NavLinkProps> = ({ href, label, icon, onClick }) => {
         `flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
           isActive
             ? 'bg-primary text-primary-foreground'
-            : 'hover:bg-muted hover:text-muted-foreground'
+            : 'text-slate-300 hover:bg-slate-800 hover:text-white'
         }`
       }
     >
@@ -216,7 +232,7 @@ const SubmenuNavLink: React.FC<SubmenuNavLinkProps> = ({
         className={`w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors ${
           isParentActive
             ? 'bg-primary bg-opacity-10 text-primary-foreground'
-            : 'hover:bg-muted hover:text-muted-foreground'
+            : 'text-slate-300 hover:bg-slate-800 hover:text-white'
         }`}
       >
         <div className="flex items-center space-x-3">
@@ -229,7 +245,7 @@ const SubmenuNavLink: React.FC<SubmenuNavLinkProps> = ({
         />
       </button>
       {isExpanded && (
-        <div className="ml-4 mt-2 space-y-1 border-l-2 border-border pl-4 animate-in fade-in duration-200">
+        <div className="ml-4 mt-2 space-y-1 border-l-2 pl-4 animate-in fade-in duration-200" style={{ borderColor: 'hsl(var(--sidebar-border))' }}>
           {submenu.map((item) => (
             <RouterNavLink
               key={item.href}
@@ -239,7 +255,7 @@ const SubmenuNavLink: React.FC<SubmenuNavLinkProps> = ({
                 `block px-4 py-2 rounded-lg transition-colors text-sm border-l-3 pl-3 ${
                   isActive
                     ? 'bg-accent text-accent-foreground border-l-accent'
-                    : 'border-l-transparent hover:bg-muted hover:text-muted-foreground'
+                    : 'border-l-transparent text-slate-400 hover:bg-slate-800 hover:text-white'
                 }`
               }
             >
